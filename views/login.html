@@ -6,6 +6,7 @@
 </script>
 <body>
 
+
 <form style="border:1px solid #ccc">
   <div class="container">
     <h1>Sign Up</h1>
@@ -13,22 +14,103 @@
     <hr>
 
     <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email">
+    <input type="text" placeholder="Enter Email" id="user" name="email">
 
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" >
+    <input type="password" placeholder="Enter Password" id="pwd" name="psw" >
 
     <div class="clearfix">
-      <input type="submit" id="sub" class="signupbtn">
+      <input type="submit" id="sub" value="signupbtn">
     </div>
   </div>
 </form>
-<script>
-const sub = document.getElementById('sub');
-const call = () => console.log('flag')
 
-sub.addEventListener("Click", call())
+
+<script>
+
+let sub = document.getElementById('sub').addEventListener("click", function(eve){
+  eve.preventDefault()
+  usr = document.getElementById('user').value
+  pword = document.getElementById('pwd').value
+
+
+
+
+
+})
+
+
 </script>
 
+
+
+
+
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+button:hover {
+  opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  padding: 14px 20px;
+  background-color: #f44336;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+.signupbtn {
+  float: left;
+  width: 100%;
+}
+
+/* Add padding to container elements */
+.container {
+  padding: 16px;
+}
+
+/* Clear floats */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+</style>
 </body>
 </html>
