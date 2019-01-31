@@ -17,9 +17,7 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(dbFile);
 
 
-// http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
-  // response.sendFile(__dirname + '/views/login.html');
   db.all('SELECT * FROM users', function(err, rows){
     response.send(rows)
   })
@@ -42,7 +40,7 @@ app.post('/loggingin', function(req, res){
     rows.map(f => {
       if(f.username === usrname && f.password === secret){
         console.log('Success')
-        return res.redirect('/login')
+        return res.redirect('/login') //This should redirect to a page saying that you're logged in, but it refuses to redirect and seems to be sending raw html?
 
       }
       else {

@@ -7,10 +7,9 @@ G_Login
 #### To-do
 ___
 
-1. Create schema for users, and insert it into the db
-2. Handle requests correctly and render the corresponding page
-3. Grab user input from a post request and match it against what's in the DB
-  1. This is the signup portion
+1. Grab user input from a post request and match it against what's in the DB
+  1. Just about done with this current problem is redirecting the user after they login, could be the whole "sessions" part of a user login system
+2. Add signup functionality
 
 
 
