@@ -6,12 +6,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
-// we've started you off with Express,
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
-
-// http://expressjs.com/en/starter/static-files.html
-app.use(express.static('public'));
 
 // init sqlite db
 var fs = require('fs');
@@ -23,17 +19,46 @@ var db = new sqlite3.Database(dbFile);
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
+  // response.sendFile(__dirname + '/views/login.html');
+  db.all('SELECT * FROM users', function(err, rows){
+    response.send(rows)
+  })
+
+});
+
+app.get('/login', function(request, response) {
   response.sendFile(__dirname + '/views/login.html');
+
 });
 
-app.post('/sign', function(request, response) {
-  response.sendFile(__dirname + '/views/signup.html');
-  console.log(request.body)
-});
+app.post('/loggingin', function(req, res){
+  let usrname = req.body.uname
+  let secret = req.body.pw
 
-app.post('/login', function(req, res){
-  
+
+  db.all('SELECT * FROM users', function(err, rows){
+    console.log(rows[0])
+
+    rows.map(f => {
+      if(f.username === usrname && f.password === secret){
+        console.log('Success')
+        return res.redirect('/login')
+
+      }
+      else {
+        //DO something here
+      }
+    })
+
+
+  })
 })
+app.get('/loggedin', function(req, res){
+  res.sendFile(__dirname + '/views/index.html')
+})
+
+
+app.use(express.static('public'));
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function() {
