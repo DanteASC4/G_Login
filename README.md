@@ -20,4 +20,4 @@ ___
 3. Logged in
 
 
-Login in and signup could be the same page, just handled differently with rendering and based on the URLm
+Login in and signup could be the same page, just handled differently with rendering and based on the URL

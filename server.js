@@ -43,7 +43,12 @@ db.serialize(function(){
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+  response.sendFile(__dirname + '/views/login.html');
+});
+
+app.post('/sign', function(request, response) {
+  response.sendFile(__dirname + '/views/signup.html');
+  console.log(request.body)
 });
 
 // endpoint to get all the dreams in the database
