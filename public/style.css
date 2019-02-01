@@ -1,71 +1,56 @@
-/* styles */
-/* called by your view template */
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box}
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
-  margin: 2em;
-}
-
-h1 {
-  font-style: italic;
-  color: #373fff;
-}
-
-.bold {
-  font-weight: bold;
-}
-
-p {
-  max-width: 600px;
-}
-
-form {
-  margin-bottom: 25px;
+input[type=text], input[type=password] {
+  width: 100%;
   padding: 15px;
-  background-color: cyan;
+  margin: 5px 0 22px 0;
   display: inline-block;
-  width: 100%;
-  max-width: 340px;
-  border-radius: 3px;
+  border: none;
+  background: #f1f1f1;
 }
 
-input {
-  display: block;
-  margin-bottom: 10px;
-  padding: 5px;
-  width: 100%;
-  border: 1px solid lightgrey;
-  border-radius: 3px;
-  font-size: 16px;
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
 }
 
 button {
-  font-size: 16px;
-  border-radius: 3px;
-  background-color: lightgrey;
-  border: 1px solid grey;
-  box-shadow: 2px 2px teal;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
   cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
 }
 
 button:hover {
-  background-color: yellow;
+  opacity:1;
 }
 
-button:active {
-  box-shadow: none;
+.cancelbtn {
+  padding: 14px 20px;
+  background-color: #f44336;
 }
 
-li {
-  margin-bottom: 5px;
+.signupbtn {
+  float: left;
+  width: 100%;
 }
 
-footer {
-  margin-top: 50px;
-  padding-top: 25px;
-  border-top: 1px solid lightgrey;
+.container {
+  padding: 16px;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
 }

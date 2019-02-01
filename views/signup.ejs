@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" href="basic.css">
+<link rel="stylesheet" href="style.css">
 
 
-</script>
 <body>
 
-<form action="/action_page.php" style="border:1px solid #ccc">
+<form action="/signup" method="POST" style="border:1px solid #ccc">
   <div class="container">
     <h1>Sign Up</h1>
     <p>Please fill in this form to create an account.</p>
     <hr>
 
     <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" required>
+    <input type="text" placeholder="Enter Email" name="username" required>
 
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+    <input type="password" placeholder="Enter Password" name="password" required>
 
     <div class="clearfix">
       <button type="submit" class="signupbtn">Sign Up</button>
@@ -24,7 +23,7 @@
   </div>
 </form>
 
-<script src="views/test.js"></script>
+
 
 </body>
 </html>
