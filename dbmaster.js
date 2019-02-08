@@ -1,8 +1,13 @@
+const bcrypt = require('bcrypt');
+const sRounds = 10;
+const tPass = "Testing"
+
 // init sqlite db
 var fs = require('fs');
-var dbFile = './.data/sqlite.db';
+var dbFile = process.env.PATH_TO_DB;
 var exists = fs.existsSync(dbFile);
 var sqlite3 = require('sqlite3').verbose();
+
 
 //CRUD
 //Create read update delete
@@ -13,13 +18,22 @@ module.exports = new class Dbhandler{
 
   }
 
+
   addUser(u, p){
+    const self = this;
+
     return new Promise((rez, rej) => {
-      const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
-      this.db.run(sql, [u, p], function(err){
-        if(err) return rej(err)
-        rez()
-      })
+      console.log(u, p)
+
+      bcrypt.hashSync(p, sRounds, function(hash, err){
+        if(err) return rej(err) //Login failed
+        const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
+
+        self.db.run(sql, [u, hash], function(dberr){
+            if(dberr) return rej(dberr) //DB problem
+            rez()
+          })
+        })
     })
 
 

@@ -1,5 +1,4 @@
-// server.js
-// where your node app starts
+require("dotenv").load()
 
 // init project
 var express = require('express');
@@ -14,6 +13,7 @@ app.use(express.urlencoded({extended : true}))
 const log = console.log
 const Dbhandler = require('./dbmaster')
 
+log(process.env.SESSION_SECRET)
 
 //POST function
 const warden = (req, res, next) =>{
@@ -96,6 +96,7 @@ app.post('/update', (req, res) =>{
 
 const pNumber = process.env.PORT || 8080
 
+//npm run ss
 // listen for requests :)
 var listener = app.listen(pNumber, function() {
   console.log('Your app is listening on port ' + listener.address().port);
