@@ -20,31 +20,30 @@ module.exports = new class Dbhandler{
 
 
   addUser(u, p){
-    const self = this;
+      const self = this;
+      return new Promise((rez, rej) => {
+        bcrypt.hash(p, sRounds, function(err, hash){
+          if(err) return rej(err) //Login failed
+          const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
 
-    return new Promise((rez, rej) => {
-      console.log(u, p)
-
-      bcrypt.hashSync(p, sRounds, function(hash, err){
-        if(err) return rej(err) //Login failed
-        const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
-
-        self.db.run(sql, [u, hash], function(dberr){
-            if(dberr) return rej(dberr) //DB problem
-            rez()
+          self.db.run(sql, [u, hash], function(dberr){
+              if(dberr) return rej(dberr) //DB problem
+              rez()
+            })
           })
-        })
-    })
-
-
-   }
+      })
+     }
 
    verifyUser(u, p){
     return new Promise((rez, rej) =>{
-      const sql = 'SELECT * FROM users WHERE username = ? AND password = ?;';
-      this.db.get(sql, [u, p], function(err, row){
-        if(row) return rez()
-        rej(err)
+      const sql = 'SELECT * FROM users WHERE username = ?;';
+      this.db.get(sql, [u], function(err, row){
+        bcrypt.compare(p, row.password, function(err, res){
+          if(res){
+            return rez(row)
+          }
+          rej(err)
+        })
       })
     })
    }
@@ -65,5 +64,16 @@ module.exports = new class Dbhandler{
        console.log(rows)
        return rows
      })
+   }
+
+   getUser(i){return new Promise((rez, rej)=>{
+      const sql = "SELECT * FROM users WHERE id = ?";
+      const self = this;
+      self.db.get(sql, [i], function(err, rows){
+        return rez(rows)
+      })
+      rej(err)
+    })
+
    }
 }
