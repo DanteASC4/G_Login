@@ -69,10 +69,13 @@ module.exports = new class Dbhandler{
    getUser(i){return new Promise((rez, rej)=>{
       const sql = "SELECT * FROM users WHERE id = ?";
       const self = this;
-      self.db.get(sql, [i], function(err, rows){
+      self.db.get(sql, [i], (error, rows) => {
         return rez(rows)
+        if(error){
+          rej('Failed')
+          console.log(error)
+        }
       })
-      rej(err)
     })
 
    }

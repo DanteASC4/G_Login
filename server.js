@@ -42,10 +42,10 @@ passport.use(new LocalStrategy(
         }
 
         let user = JSON.stringify(val);
-        return done(null, user)
+        done(null, user)
       })
       .catch(err =>{
-        log(err)
+        done(err)
       })
 
   }
@@ -60,9 +60,13 @@ passport.serializeUser((user, done) =>{
 })
 
 passport.deserializeUser((id, done) =>{
+  log(chalk.red(id))
   Dbhandler.getUser(id)
     .then(res => done(null, res))
-    .catch(err => done(null, false))
+    .catch(err => {
+      //Unexpected behavior: if you change the done to just done(err) it gets weird
+      done(err)
+    })
 })
 
 app.set('view engine', 'ejs')
@@ -79,7 +83,7 @@ app.use(session({
   store: new FileStore(),
   secret: process.env.SECRET, //Required, used to sign session
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false
 }))
 app.use(passport.initialize());
 app.use(passport.session());
@@ -87,22 +91,22 @@ app.use(passport.session());
 
 log(process.env.SUCCESS)
 
-//POST function
-const warden = (req, res, next) =>{
-  res.redirect('/loggedin')
-}
 
 
+// PUBLIC PERMISSION START
 app.get('/', function(req, res) {
-  res.send(Dbhandler.showUsers());
-  log('Now we are in the homepage callback \n', 'Session id now:  ', req.sessionID )
+  res.send('Home!');
+
 });
 
-app.get('/login', function(request, response) {
-  response.render('login')
+
+app.get('/login', function(req, rez) {
+  if(req.isAuthenticated()) rez.redirect('/loggedin')
+  else rez.render('login')
 });
 
 app.post('/login', function(req, res, next){
+
   passport.authenticate('local', (err, user, info) =>{
     log(chalk.cyan(user))
 
@@ -129,10 +133,6 @@ app.post('/login', function(req, res, next){
   })(req, res, next)
 })
 
-app.get('/loggedin', function(req, res){
-  res.sendFile(__dirname + '/views/index.html')
-})
-
 app.get('/signup', (req, res) =>{
   res.render('signup')
 })
@@ -148,8 +148,31 @@ app.post('/signup', (req, res) => {
   .catch(error => {
     //If it failed redirect to same page
     console.error(error)
-    res.redirect('/signup')
+    res.redirect('/login')
   })
+})
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
+// PUBLIC PERMISSION END
+
+const gateKeeper = (req, rez, next) => {
+  log(req.user)
+  req.isAuthenticated() ? next() : rez.redirect('/login');
+
+
+}
+
+
+
+app.use(gateKeeper)
+
+// VALID START
+app.get('/loggedin', function(req, res){
+  res.render('index')
 })
 
 
@@ -170,12 +193,17 @@ app.post('/update', (req, res) =>{
   })
 })
 
+//VALID END
 
+//ADMIN START
+//:D
+//ADMIN END
 
 const pNumber = process.env.PORT || 8080
 
 //npm run ss
 // listen for requests :)
 var listener = app.listen(pNumber, function() {
-  console.log('Your app is listening on port ' + listener.address().port);
+  log(chalk.magenta('Your app is listening on port ' + listener.address().port));
+
 });
