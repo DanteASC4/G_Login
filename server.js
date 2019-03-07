@@ -54,13 +54,13 @@ passport.use(new LocalStrategy(
 //Telling passport how to serialze the user, which is basically just giving them the 'ok'
 
 passport.serializeUser((user, done) =>{
-  log(chalk.cyan('Serializing user... \n'))
+  // log(chalk.cyan('Serializing user... \n'))
   let pUser = JSON.parse(user)
   done(null, pUser.id);
 })
 
 passport.deserializeUser((id, done) =>{
-  log(chalk.red(id))
+  // log(chalk.red(id))
   Dbhandler.getUser(id)
     .then(res => done(null, res))
     .catch(err => {
@@ -95,7 +95,7 @@ log(process.env.SUCCESS)
 
 // PUBLIC PERMISSION START
 app.get('/', function(req, res) {
-  res.send('Home!');
+  res.render('home')
 
 });
 
@@ -123,7 +123,7 @@ app.post('/login', function(req, res, next){
     }
 
     req.login(user, (err) =>{
-      log(chalk.yellow(JSON.stringify(req.session.passport)))
+      log(chalk.yellow(JSON.stringify(user.access_level)))
       if(err) {
         return next(err)
       }
@@ -160,10 +160,8 @@ app.get('/logout', function(req, res){
 // PUBLIC PERMISSION END
 
 const gateKeeper = (req, rez, next) => {
-  log(req.user)
+  log(chalk.magenta(req.user))
   req.isAuthenticated() ? next() : rez.redirect('/login');
-
-
 }
 
 
@@ -193,10 +191,40 @@ app.post('/update', (req, res) =>{
   })
 })
 
+app.get('/index_denied', (req, res) => res.render('index_denied'))
+
 //VALID END
 
 //ADMIN START
-//:D
+const adminGatekeeping = (req, res, next) => {
+  const aLevel = parseInt(JSON.stringify(req.user.access_level))
+
+  if(aLevel == 1){
+    next()
+  } else{
+    res.redirect('/index_denied')
+  }
+}
+
+app.get('/admin', adminGatekeeping, (req, res)=>{
+
+
+  Dbhandler.showUsers()
+  .then((val) => {
+    const data = JSON.stringify(val);
+    res.render('admin', {
+      data: data
+    })
+    return
+  })
+  .catch((err) => {
+    console.error(err)
+  })
+
+
+})
+
+
 //ADMIN END
 
 const pNumber = process.env.PORT || 8080

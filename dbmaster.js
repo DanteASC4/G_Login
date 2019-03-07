@@ -59,10 +59,12 @@ module.exports = new class Dbhandler{
    }
 
    showUsers(){
-     this.db.all('SELECT * FROM users;', (err, rows) =>{
-       if(err) return console.error(err)
-       console.log(rows)
-       return rows
+     return new Promise((rez, rej) => {
+       this.db.all('SELECT * FROM users;', (err, rows) =>{
+         if(err) return rej(err)
+         console.log(rows)
+         rez(rows)
+       })
      })
    }
 
